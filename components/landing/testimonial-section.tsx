@@ -62,7 +62,7 @@ export function TestimonialsSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text dark:text-transparent">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
             Lo que dicen nuestros usuarios
           </h2>
           <p className="text-lg text-muted-foreground">
@@ -104,7 +104,7 @@ export function TestimonialsSection() {
                       </motion.div>
                     ))}
                   </motion.div>
-                  <p className="text-muted-foreground mb-6 leading-relaxed group-hover:text-foreground transition-colors duration-200">&quot;{testimonial.content}&quot;</p>
+                  <p className="text-muted-foreground mb-6 leading-relaxed group-hover:text-foreground transition-colors duration-200">&ldquo;{testimonial.content}&rdquo;</p>
                   <div>
                     <p className="font-semibold text-foreground group-hover:text-primary transition-colors duration-200">{testimonial.name}</p>
                     <p className="font-semibold text-muted-foreground group-hover:text-foreground transition-colors duration-200">{testimonial.role}</p>

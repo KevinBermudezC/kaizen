@@ -33,8 +33,8 @@ export function HeroSection() {
         animate="visible"
       >
         <motion.h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight" variants={itemVariants}>
-          Mejora continua
-          <span className="block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">con Kaizen</span>
+          <span className="text-foreground">Mejora continua</span>
+          <span className="block text-primary dark:text-blue-400">con Kaizen</span>
         </motion.h1>
 
         <motion.p

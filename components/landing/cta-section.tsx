@@ -14,7 +14,7 @@ export function CTASection() {
         transition={{ duration: 0.6 }}
       >
         <motion.h2
-          className="text-3xl md:text-4xl font-bold mb-6 text-foreground bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text dark:text-transparent"
+          className="text-3xl md:text-4xl font-bold mb-6 text-foreground"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -54,7 +54,7 @@ export function CTASection() {
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 15 }}
           >
-            <Button variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 hover:shadow-xl">
+            <Button variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 hover:shadow-xl dark:hover:bg-primary/80 dark:hover:text-primary-foreground dark:border-primary">
               Ver en GitHub
             </Button>
           </motion.div>
