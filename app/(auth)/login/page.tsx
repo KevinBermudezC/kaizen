@@ -1,9 +1,25 @@
-import React from 'react'
+'use client'
 
-const page = () => {
+import { SignInForm } from '@/components/auth'
+
+
+export default function LoginPage() {
+
+  const handleSignInSuccess = () => {
+    console.log('Usuario autenticado exitosamente')
+  }
+
   return (
-    <div>page</div>
+    <div className="w-full">
+      <SignInForm 
+        onSuccess={handleSignInSuccess}
+        onSwitchToSignUp={() => {
+          window.location.href = '/register'
+        }}
+        onSwitchToForgotPassword={() => {
+          window.location.href = '/forgot-password'
+        }}
+      />
+    </div>
   )
 }
-
-export default page

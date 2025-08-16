@@ -1,17 +1,6 @@
 'use client'
 
-import { ReactNode } from "react"
 import { authClient } from "@/lib/auth-client"
-
-interface AuthProviderProps {
-  children: ReactNode
-}
-
-// Better Auth maneja el estado de autenticación internamente usando nanostores
-// No necesitamos un provider personalizado
-export function AuthProvider({ children }: AuthProviderProps) {
-  return <>{children}</>
-}
 
 // Hook personalizado que usa Better Auth directamente
 // Según la documentación oficial: https://www.better-auth.com/docs/basic-usage
@@ -37,5 +26,23 @@ export function useAuth() {
     
     // Acceso directo a la sesión completa
     session: session.data,
+    
+    // Métodos del plugin Email OTP
+    emailOTP: {
+      // Enviar OTP para verificación
+      sendVerificationOTP: authClient.emailOtp.sendVerificationOtp,
+      
+      // Iniciar sesión con OTP
+      signIn: authClient.signIn.emailOtp,
+      
+      // Verificar email con OTP
+      verifyEmail: authClient.emailOtp.verifyEmail,
+      
+      // Recuperar contraseña con OTP
+      forgotPassword: authClient.forgetPassword.emailOtp,
+      
+      // Restablecer contraseña con OTP
+      resetPassword: authClient.emailOtp.resetPassword,
+    },
   }
 }

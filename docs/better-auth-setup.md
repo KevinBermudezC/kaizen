@@ -1,15 +1,8 @@
-# Configuración de Better Auth para Kaizen
-
-## Resumen de la Implementación
-
-Después de revisar la [documentación oficial de Better Auth](https://www.better-auth.com/docs/basic-usage), hemos implementado la autenticación correctamente usando la API oficial.
-
-## Arquitectura Implementada
-
 ### 1. Servidor (`lib/auth.ts`)
 ```typescript
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
+import { emailOTP } from "better-auth/plugins"
 import { db } from "@/index"
 
 export const auth = betterAuth({
@@ -20,6 +13,22 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: true,
   },
+  plugins: [
+    emailOTP({
+      // Configuración del plugin Email OTP
+      otpLength: 6, // Código de 6 dígitos
+      expiresIn: 300, // Expira en 5 minutos
+      allowedAttempts: 3, // 3 intentos antes de invalidar
+      overrideDefaultEmailVerification: true, // Usar OTP en lugar de enlaces
+      sendVerificationOnSignUp: true, // Enviar OTP al registrarse
+      
+      // Función para enviar el OTP por email
+      async sendVerificationOTP({ email, otp, type }) {
+        // TODO: Implementar envío real de email
+        console.log(`📧 Enviando OTP ${otp} a ${email} para ${type}`)
+      },
+    }),
+  ],
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 días
   },
@@ -30,21 +39,20 @@ export const auth = betterAuth({
 ### 2. Cliente (`lib/auth-client.ts`)
 ```typescript
 import { createAuthClient } from "better-auth/react"
+import { emailOTPClient } from "better-auth/client/plugins"
 
 export const authClient = createAuthClient({
-  baseURL: "http://localhost:3000"
+  baseURL: "http://localhost:3000",
+  plugins: [
+    emailOTPClient()
+  ]
 })
 ```
 
-### 3. Provider (`providers/auth-provider.tsx`)
+### 3. Hook (`hooks/use-auth.ts`)
 ```typescript
-// Better Auth maneja el estado internamente usando nanostores
-// NO necesitamos un provider personalizado
-export function AuthProvider({ children }: AuthProviderProps) {
-  return <>{children}</>
-}
-
-// Hook que usa Better Auth directamente
+// Hook personalizado que usa Better Auth directamente
+// Según la documentación oficial: https://www.better-auth.com/docs/basic-usage
 export function useAuth() {
   const session = authClient.useSession()
   
@@ -61,78 +69,48 @@ export function useAuth() {
     session: session.data,
   }
 }
-```
 
-## Cómo Funciona
+## Plugin Email OTP
 
-### Estado de Autenticación
-- **Better Auth maneja todo internamente** usando nanostores
-- **`useSession()`** proporciona `{ data, isPending, error, refetch }`
-- **No hay estado duplicado** en React
+Hemos implementado el plugin de **Email OTP** que ofrece una experiencia de autenticación más segura y moderna:
 
-### Métodos de Autenticación
-Según la documentación oficial, todos los métodos devuelven `{ data, error }`:
+### 🚀 Ventajas del Email OTP:
+
+- ✅ **Más seguro** - No hay enlaces que puedan ser interceptados
+- ✅ **Mejor UX** - Códigos de 6 dígitos fáciles de ingresar
+- ✅ **Expiración automática** - Los códigos expiran en 5 minutos
+- ✅ **Límite de intentos** - Máximo 3 intentos antes de invalidar
+- ✅ **Verificación automática** - Se envía OTP al registrarse
+- ✅ **Recuperación de contraseña** - Todo integrado en un solo plugin
+
+### 📱 Funcionalidades disponibles:
+
+1. **Inicio de sesión con OTP** - `emailOTP.signIn()`
+2. **Verificación de email** - `emailOTP.verifyEmail()`
+3. **Recuperación de contraseña** - `emailOTP.forgotPassword()`
+4. **Restablecimiento de contraseña** - `emailOTP.resetPassword()`
+5. **Envío de OTP** - `emailOTP.sendVerificationOTP()`
+
+### 🔧 Configuración actual:
 
 ```typescript
-// Sign Up
-const { data, error } = await authClient.signUp.email({
-  email,
-  password,
-  name,
-  callbackURL: "/dashboard" // opcional
-})
-
-// Sign In
-const { data, error } = await authClient.signIn.email({
-  email,
-  password,
-  callbackURL: "/dashboard", // opcional
-  rememberMe: false // opcional, por defecto true
-})
-
-// Forgot Password
-const { data, error } = await authClient.forgetPassword({
-  email
+emailOTP({
+  otpLength: 6,                    // Código de 6 dígitos
+  expiresIn: 300,                  // Expira en 5 minutos
+  allowedAttempts: 3,              // 3 intentos máximo
+  overrideDefaultEmailVerification: true,  // Usar OTP en lugar de enlaces
+  sendVerificationOnSignUp: true,  // Enviar OTP al registrarse
 })
 ```
 
-### Manejo de Errores
-```typescript
-if (error) {
-  throw new Error(error.message || 'Error al autenticarse')
-}
+### 📧 Implementación del envío de emails:
 
-if (data) {
-  // Operación exitosa
-  console.log('Usuario autenticado:', data.user)
-}
-```
+Actualmente el plugin está configurado para desarrollo (console.log). Para producción, necesitas:
 
-## Ventajas de Esta Implementación
+1. **Elegir un email provider** (Resend, SendGrid, SMTP)
+2. **Implementar la función `sendVerificationOTP`**
+3. **Configurar las variables de entorno** correspondientes
 
-✅ **Sin Provider personalizado** - Better Auth maneja todo  
-✅ **API oficial** - Seguimos exactamente la documentación  
-✅ **Estado sincronizado** - Cambios se reflejan en tiempo real  
-✅ **Menos código** - No necesitamos Context, useState, useEffect  
-✅ **Mejor rendimiento** - Usa nanostores optimizados  
+Ver [Configuración de Email](./email-configuration.md) para más detalles.
 
 ## Próximos Pasos
-
-1. **Configurar variables de entorno**:
-   ```bash
-   DATABASE_URL="postgresql://..."
-   BETTER_AUTH_SECRET="tu-secreto-seguro"
-   BETTER_AUTH_URL="http://localhost:3000"
-   ```
-
-2. **Configurar servidor de email** para verificación y recuperación
-
-3. **Crear páginas de autenticación** usando el componente de ejemplo
-
-4. **Integrar con el dashboard** para usuarios autenticados
-
-## Referencias
-
-- [Documentación oficial de Better Auth](https://www.better-auth.com/docs)
-- [Basic Usage](https://www.better-auth.com/docs/basic-usage)
-- [Session Management](https://www.better-auth.com/docs/concepts/session-management)
