@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/index";
+import * as schema from "@/db/schema";
 
 // Verificar que BETTER_AUTH_SECRET esté configurada
 if (!process.env.BETTER_AUTH_SECRET) {
@@ -10,6 +11,7 @@ if (!process.env.BETTER_AUTH_SECRET) {
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
+    schema: schema, // Pasar todo el esquema para que Better Auth pueda encontrar las tablas
   }),
   emailAndPassword: {
     enabled: true,
