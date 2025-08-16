@@ -56,6 +56,8 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onSwitchToForgotPasswo
       
       if (result) {
         onSuccess?.()
+        // Redirigir al dashboard después del login exitoso
+        window.location.href = '/dashboard'
       }
     } catch (error) {
       form.setError('root', {

@@ -8,6 +8,20 @@
       "when": 1755371359666,
       "tag": "0000_friendly_hercules",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1755380154368,
+      "tag": "0001_robust_thanos",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1755380772408,
+      "tag": "0002_small_tarot",
+      "breakpoints": true
     }
   ]
 }

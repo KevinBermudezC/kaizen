@@ -82,6 +82,8 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
       
       if (result) {
         onSuccess?.()
+        // Redirigir al dashboard después del registro exitoso
+        window.location.href = '/dashboard'
       }
     } catch (error) {
       form.setError('root', {
