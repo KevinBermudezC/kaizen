@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kaizen
 
-## Getting Started
+Kaizen es una aplicación web para gestionar hábitos diarios y de largo plazo. El objetivo es ayudar a los usuarios a crear, seguir y mantener hábitos positivos, con métricas de progreso y recordatorios.
 
-First, run the development server:
+## Características actuales
+- Gestión de hábitos diarios y de largo plazo
+- Métricas de progreso
+- Recordatorios
+- Autenticación (BetterAuth)
+- Interfaz moderna con componentes UI personalizados
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Estructura del proyecto
+- `app/` - Páginas principales y layout
+- `components/` - Componentes reutilizables de UI
+- `lib/` - Utilidades
+- `public/` - Archivos estáticos e imágenes
+- `.env.local` - Variables de entorno (ejemplo: conexión a base de datos PostgreSQL)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Instalación
+1. Clona el repositorio
+2. Instala las dependencias:
+	```bash
+	npm install
+	```
+3. Configura las variables de entorno en `.env.local`
+4. Inicia la aplicación:
+	```bash
+	npm run dev
+	```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tecnologías utilizadas
+- Next.js
+- TypeScript
+- Drizzle
+- PostgreSQL
+- BetterAuth
+- Shadcn UI
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Próximos pasos
+- Implementar CRUD de hábitos
+- Mejorar las métricas y visualizaciones
+- Notificaciones push
+- Personalización de recordatorios
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> Proyecto en desarrollo por Kevin Bermudez
