@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 
 export function CTASection() {
   return (
-    <section className="py-20 px-4 bg-accent/5">
+    <section className="py-20 px-4 bg-gradient-to-r from-primary/10 via-secondary/5 to-accent/10">
       <motion.div
         className="container mx-auto max-w-4xl text-center"
         initial={{ opacity: 0, y: 30 }}
@@ -14,7 +14,7 @@ export function CTASection() {
         transition={{ duration: 0.6 }}
       >
         <motion.h2
-          className="text-3xl md:text-4xl font-bold mb-6"
+          className="text-3xl md:text-4xl font-bold mb-6 text-foreground"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -41,12 +41,12 @@ export function CTASection() {
           transition={{ delay: 0.6, duration: 0.6 }}
         >
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button size="lg" className="text-lg px-8 py-6">
+            <Button size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground">
               Comenzar Gratis
             </Button>
           </motion.div>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent">
+            <Button variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent border-primary text-primary hover:bg-primary hover:text-primary-foreground">
               Ver en GitHub
             </Button>
           </motion.div>

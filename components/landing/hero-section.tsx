@@ -34,7 +34,7 @@ export function HeroSection() {
       >
         <motion.h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight" variants={itemVariants}>
           Mejora continua
-          <span className="block text-accent">con Kaizen</span>
+          <span className="block text-primary">con Kaizen</span>
         </motion.h1>
 
         <motion.p
@@ -47,12 +47,12 @@ export function HeroSection() {
 
         <motion.div className="flex flex-col sm:flex-row gap-4 justify-center mb-12" variants={itemVariants}>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button size="lg" className="text-lg px-8 py-6">
+            <Button size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground">
               Comenzar Gratis
             </Button>
           </motion.div>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent">
+            <Button variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent border-primary text-primary hover:bg-primary hover:text-primary-foreground">
               Ver en GitHub
             </Button>
           </motion.div>
@@ -60,18 +60,18 @@ export function HeroSection() {
 
         <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16" variants={containerVariants}>
           <motion.div className="flex flex-col items-center text-center" variants={itemVariants} whileHover={{ y: -5 }}>
-            <div className="h-12 w-12 rounded-full bg-accent/10 flex items-center justify-center mb-4">
-              <CheckCircle className="h-6 w-6 text-accent" />
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+              <CheckCircle className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="font-semibold mb-2">Seguimiento Simple</h3>
+            <h3 className="font-semibold mb-2 text-foreground">Seguimiento Simple</h3>
             <p className="text-sm text-muted-foreground">Marca tus hábitos completados con un solo toque</p>
           </motion.div>
 
           <motion.div className="flex flex-col items-center text-center" variants={itemVariants} whileHover={{ y: -5 }}>
-            <div className="h-12 w-12 rounded-full bg-accent/10 flex items-center justify-center mb-4">
-              <Target className="h-6 w-6 text-accent" />
+            <div className="h-12 w-12 rounded-full bg-secondary/10 flex items-center justify-center mb-4">
+              <Target className="h-6 w-6 text-secondary" />
             </div>
-            <h3 className="font-semibold mb-2">Metas Claras</h3>
+            <h3 className="font-semibold mb-2 text-foreground">Metas Claras</h3>
             <p className="text-sm text-muted-foreground">Define objetivos específicos y alcanzables</p>
           </motion.div>
 
@@ -79,7 +79,7 @@ export function HeroSection() {
             <div className="h-12 w-12 rounded-full bg-accent/10 flex items-center justify-center mb-4">
               <TrendingUp className="h-6 w-6 text-accent" />
             </div>
-            <h3 className="font-semibold mb-2">Progreso Visual</h3>
+            <h3 className="font-semibold mb-2 text-foreground">Progreso Visual</h3>
             <p className="text-sm text-muted-foreground">Visualiza tu crecimiento con gráficos intuitivos</p>
           </motion.div>
         </motion.div>

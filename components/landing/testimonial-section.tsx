@@ -46,7 +46,7 @@ export function TestimonialsSection() {
       y: 0,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 100,
       },
     },
@@ -62,7 +62,7 @@ export function TestimonialsSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Lo que dicen nuestros usuarios</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">Lo que dicen nuestros usuarios</h2>
           <p className="text-lg text-muted-foreground">
             Personas que han adoptado la filosofía Kaizen para su crecimiento personal
           </p>
@@ -77,7 +77,7 @@ export function TestimonialsSection() {
         >
           {testimonials.map((testimonial, index) => (
             <motion.div key={index} variants={cardVariants}>
-              <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-300 group">
+              <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-300 group bg-background">
                 <CardContent className="p-6">
                   <motion.div
                     className="flex mb-4"
@@ -90,9 +90,9 @@ export function TestimonialsSection() {
                       <Star key={i} className="h-4 w-4 fill-accent text-accent" />
                     ))}
                   </motion.div>
-                  <p className="text-muted-foreground mb-6 leading-relaxed">"{testimonial.content}"</p>
+                  <p className="text-muted-foreground mb-6 leading-relaxed">&quot;{testimonial.content}&quot;</p>
                   <div>
-                    <p className="font-semibold">{testimonial.name}</p>
+                    <p className="font-semibold text-foreground">{testimonial.name}</p>
                     <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                   </div>
                 </CardContent>
