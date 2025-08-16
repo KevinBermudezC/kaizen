@@ -3,6 +3,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Calendar, BarChart3, Bell, Smartphone } from "lucide-react"
 import { motion } from "framer-motion"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
 export function FeaturesSection() {
   const features = [
@@ -76,7 +78,7 @@ export function FeaturesSection() {
   }
 
   return (
-    <section id="funciones" className="py-20 px-4 bg-gradient-to-br from-slate-50 via-blue-50/30 to-green-50/30 dark:from-slate-900 dark:via-blue-900/20 dark:to-green-900/20">
+    <section id="funciones" className="py-20 px-4 bg-gradient-to-br from-slate-50 via-blue-50/40 to-green-50/40 dark:from-slate-900 dark:via-blue-900/30 dark:to-green-900/30">
       <div className="container mx-auto max-w-6xl">
         <motion.div
           className="text-center mb-16"
@@ -132,6 +134,21 @@ export function FeaturesSection() {
               </Card>
             </motion.div>
           ))}
+        </motion.div>
+
+        {/* Botón CTA */}
+        <motion.div
+          className="text-center mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+        >
+          <Link href="/register">
+            <Button size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-xl cursor-pointer">
+              Comenzar Ahora
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>

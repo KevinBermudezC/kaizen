@@ -3,6 +3,8 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Star } from "lucide-react"
 import { motion } from "framer-motion"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
 export function TestimonialsSection() {
   const testimonials = [
@@ -53,7 +55,7 @@ export function TestimonialsSection() {
   }
 
   return (
-    <section id="testimonios" className="py-20 px-4 bg-gradient-to-br from-slate-50 via-blue-50/20 to-green-50/20 dark:from-slate-900 dark:via-blue-900/10 dark:to-green-900/10">
+    <section id="testimonios" className="py-20 px-4 bg-gradient-to-br from-slate-50 via-blue-50/30 to-green-50/30 dark:from-slate-900 dark:via-blue-900/20 dark:to-green-900/20">
       <div className="container mx-auto max-w-6xl">
         <motion.div
           className="text-center mb-16"
@@ -116,6 +118,21 @@ export function TestimonialsSection() {
               </Card>
             </motion.div>
           ))}
+        </motion.div>
+
+        {/* Botón CTA */}
+        <motion.div
+          className="text-center mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+        >
+          <Link href="/register">
+            <Button size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-xl cursor-pointer">
+              Únete a Kaizen
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>

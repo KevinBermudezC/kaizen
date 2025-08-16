@@ -166,14 +166,14 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        className="absolute right-0 top-0 h-full px-3 py-2 cursor-pointer"
                         onClick={() => setShowPassword(!showPassword)}
                         disabled={isSubmitting}
                       >
                         {showPassword ? (
-                          <EyeOff className="h-4 w-4" />
+                          <EyeOff className="h-4 w-4 hover:bg-primary/10" />
                         ) : (
-                          <Eye className="h-4 w-4" />
+                          <Eye className="h-4 w-4 hover:bg-primary/10" />
                         )}
                         <span className="sr-only">
                           {showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
@@ -265,14 +265,14 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        className="absolute right-0 top-0 h-full px-3 py-2 cursor-pointer"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         disabled={isSubmitting}
                       >
                         {showConfirmPassword ? (
-                          <EyeOff className="h-4 w-4" />
+                          <EyeOff className="h-4 w-4 hover:bg-primary/10" />
                         ) : (
-                          <Eye className="h-4 w-4" />
+                          <Eye className="h-4 w-4 hover:bg-primary/10" />
                         )}
                         <span className="sr-only">
                           {showConfirmPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
@@ -294,7 +294,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full cursor-pointer"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -316,7 +316,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
             <Button
               type="button"
               variant="link"
-              className="p-0 h-auto font-normal text-primary hover:text-primary/80"
+              className="p-0 h-auto font-normal text-primary hover:text-primary/80 cursor-pointer"
               onClick={onSwitchToSignIn}
               disabled={isSubmitting}
             >

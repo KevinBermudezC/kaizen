@@ -1,7 +1,9 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { Github, ExternalLink } from "lucide-react"
 import { motion } from "framer-motion"
+import Link from "next/link"
 
 export function CTASection() {
   return (
@@ -43,20 +45,31 @@ export function CTASection() {
           <motion.div 
             whileHover={{ scale: 1.05, y: -3 }} 
             whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300, damping: 15 }}
+            transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
           >
-            <Button size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-xl">
-              Comenzar Gratis
-            </Button>
+            <Link href="/register">
+              <Button size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-xl cursor-pointer">
+                Comenzar Gratis
+              </Button>
+            </Link>
           </motion.div>
           <motion.div 
             whileHover={{ scale: 1.05, y: -3 }} 
             whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300, damping: 15 }}
+            transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
           >
-            <Button variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 hover:shadow-xl dark:hover:bg-primary/80 dark:hover:text-primary-foreground dark:border-primary">
-              Ver en GitHub
-            </Button>
+            <a 
+              href="https://github.com/KevinBermudezC/kaizen" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-block"
+            >
+              <Button variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 hover:shadow-xl dark:hover:bg-primary/80 dark:hover:text-primary-foreground dark:border-primary cursor-pointer">
+                <Github className="mr-2 h-5 w-5" />
+                Ver en GitHub
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </Button>
+            </a>
           </motion.div>
         </motion.div>
 

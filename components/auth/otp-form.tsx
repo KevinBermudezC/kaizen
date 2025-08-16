@@ -182,7 +182,7 @@ export function OtpForm({ email, type, onSuccess, onBack, onResend }: OtpFormPro
         <CardContent className="space-y-4">
           <Button
             type="button"
-            className="w-full"
+            className="w-full cursor-pointer"
             onClick={onSuccess}
           >
             Continuar
@@ -239,7 +239,7 @@ export function OtpForm({ email, type, onSuccess, onBack, onResend }: OtpFormPro
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full cursor-pointer"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -260,7 +260,7 @@ export function OtpForm({ email, type, onSuccess, onBack, onResend }: OtpFormPro
             <Button
               type="button"
               variant="ghost"
-              className="text-sm"
+              className="text-sm cursor-pointer"
               onClick={handleResend}
               disabled={isSubmitting || countdown > 0}
             >
@@ -288,7 +288,7 @@ export function OtpForm({ email, type, onSuccess, onBack, onResend }: OtpFormPro
             <Button
               type="button"
               variant="ghost"
-              className="text-sm"
+              className="text-sm cursor-pointer"
               onClick={onBack}
               disabled={isSubmitting}
             >

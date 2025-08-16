@@ -80,12 +80,12 @@ export default function VerifyOtpPage() {
             
             <div className="space-y-2">
               <Link href="/login">
-                <Button size="sm" className="w-full bg-purple-600 hover:bg-purple-700 text-white">
+                <Button size="sm" className="w-full bg-purple-600 hover:bg-purple-700 text-white cursor-pointer">
                   Ir al Login
                 </Button>
               </Link>
               <Link href="/register">
-                <Button size="sm" variant="outline" className="w-full">
+                <Button size="sm" variant="outline" className="w-full cursor-pointer">
                   Ir al Registro
                 </Button>
               </Link>
@@ -101,7 +101,7 @@ export default function VerifyOtpPage() {
       {/* Botón volver arriba */}
       <div className="mb-4">
         <Link href="/">
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" className="cursor-pointer">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Volver al Inicio
           </Button>

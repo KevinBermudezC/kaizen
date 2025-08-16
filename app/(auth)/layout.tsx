@@ -57,7 +57,7 @@ const AuthLayout = ({
         </div>
         <div className="mb-4">
           <Link href="/">
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="cursor-pointer">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Volver al Inicio
             </Button>

@@ -1,8 +1,9 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { CheckCircle, Target, TrendingUp } from "lucide-react"
+import { CheckCircle, Target, TrendingUp, ExternalLink, Github } from "lucide-react"
 import { motion } from "framer-motion"
+import Link from "next/link"
 
 export function HeroSection() {
   const containerVariants = {
@@ -25,7 +26,7 @@ export function HeroSection() {
   }
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-slate-50 via-blue-50/30 to-green-50/30 dark:from-slate-900 dark:via-blue-900/20 dark:to-green-900/20">
+    <section id="inicio" className="py-20 px-4 bg-gradient-to-br from-slate-50 via-blue-50/30 to-green-50/30 dark:from-slate-900 dark:via-blue-900/20 dark:to-green-900/20">
       <motion.div
         className="container mx-auto max-w-4xl text-center"
         variants={containerVariants}
@@ -49,20 +50,31 @@ export function HeroSection() {
           <motion.div 
             whileHover={{ scale: 1.05, y: -3 }} 
             whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300, damping: 15 }}
+            transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
           >
-            <Button size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-xl">
-              Comenzar Gratis
-            </Button>
+            <Link href="/register">
+              <Button size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-xl cursor-pointer">
+                Comenzar Gratis
+              </Button>
+            </Link>
           </motion.div>
           <motion.div 
             whileHover={{ scale: 1.05, y: -3 }} 
             whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300, damping: 15 }}
+            transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
           >
-            <Button variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 hover:shadow-xl dark:hover:bg-primary/80 dark:hover:text-primary-foreground dark:border-primary">
-              Ver en GitHub
-            </Button>
+            <a 
+              href="https://github.com/KevinBermudezC/kaizen" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-block"
+            >
+              <Button variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 hover:shadow-xl dark:hover:bg-primary/80 dark:hover:text-primary-foreground dark:border-primary cursor-pointer">
+                <Github className="mr-2 h-5 w-5" />
+                Ver en GitHub
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </Button>
+            </a>
           </motion.div>
         </motion.div>
 
@@ -71,7 +83,7 @@ export function HeroSection() {
             className="flex flex-col items-center text-center group cursor-pointer" 
             variants={itemVariants} 
             whileHover={{ y: -8, scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 300, damping: 15 }}
+            transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
           >
             <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-4 transition-all duration-200 group-hover:scale-110 group-hover:shadow-lg shadow-blue-500/25">
               <CheckCircle className="h-6 w-6 text-white" />
@@ -84,7 +96,7 @@ export function HeroSection() {
             className="flex flex-col items-center text-center group cursor-pointer" 
             variants={itemVariants} 
             whileHover={{ y: -8, scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 300, damping: 15 }}
+            transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
           >
             <div className="h-12 w-12 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mb-4 transition-all duration-200 group-hover:scale-110 group-hover:shadow-lg shadow-green-500/25">
               <Target className="h-6 w-6 text-white" />
@@ -97,7 +109,7 @@ export function HeroSection() {
             className="flex flex-col items-center text-center group cursor-pointer" 
             variants={itemVariants} 
             whileHover={{ y: -8, scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 300, damping: 15 }}
+            transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
           >
             <div className="h-12 w-12 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center mb-4 transition-all duration-200 group-hover:scale-110 group-hover:shadow-lg shadow-orange-500/25">
               <TrendingUp className="h-6 w-6 text-white" />

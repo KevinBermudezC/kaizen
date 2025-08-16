@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Toggle } from "@/components/ui/toggle"
-import { Moon, Sun } from "lucide-react"
+import { Moon, Sun, Github } from "lucide-react"
 import { motion } from "framer-motion"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
@@ -18,6 +18,13 @@ export function Header() {
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark")
+  }
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   // Evitar errores de hidratación
@@ -45,38 +52,38 @@ export function Header() {
 
             {/* Navegación - Centro */}
             <nav className="hidden md:flex items-center justify-center space-x-8 col-span-2">
-              <motion.a
-                href="#inicio"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group"
+              <motion.button
+                onClick={() => scrollToSection('inicio')}
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group cursor-pointer"
                 whileHover={{ y: -2 }}
               >
                 Inicio
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"></span>
-              </motion.a>
-              <motion.a
-                href="#funciones"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group"
+              </motion.button>
+              <motion.button
+                onClick={() => scrollToSection('funciones')}
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group cursor-pointer"
                 whileHover={{ y: -2 }}
               >
                 Funciones
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"></span>
-              </motion.a>
-              <motion.a
-                href="#testimonios"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group"
+              </motion.button>
+              <motion.button
+                onClick={() => scrollToSection('testimonios')}
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group cursor-pointer"
                 whileHover={{ y: -2 }}
               >
                 Testimonios
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"></span>
-              </motion.a>
-              <motion.a
-                href="#contacto"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group"
+              </motion.button>
+              <motion.button
+                onClick={() => scrollToSection('contacto')}
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group cursor-pointer"
                 whileHover={{ y: -2 }}
               >
                 Contacto
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"></span>
-              </motion.a>
+              </motion.button>
             </nav>
 
             {/* Botones - Derecha */}
@@ -102,6 +109,17 @@ export function Header() {
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
               >
+                <a 
+                  href="https://github.com/KevinBermudezC/kaizen" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block"
+                >
+                  <Button variant="outline" size="sm" className="mr-3 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 cursor-pointer">
+                    <Github className="mr-2 h-4 w-4" />
+                    GitHub
+                  </Button>
+                </a>
                 <Link href="/login">
                   <Button className="bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg cursor-pointer">
                     Acceso Gratuito
@@ -129,6 +147,7 @@ export function Header() {
             className="flex items-center space-x-2 justify-start cursor-pointer"
             whileHover={{ scale: 1.05, y: -2 }}
             transition={{ type: "spring" as const, stiffness: 400, damping: 10 }}
+            onClick={() => scrollToSection('inicio')}
           >
             <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center transition-all duration-200 hover:shadow-lg">
               <span className="text-primary-foreground font-bold text-lg">改</span>
@@ -138,38 +157,38 @@ export function Header() {
 
           {/* Navegación - Centro */}
           <nav className="hidden md:flex items-center justify-center space-x-8 col-span-2">
-            <motion.a
-              href="#inicio"
-              className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group"
+            <motion.button
+              onClick={() => scrollToSection('inicio')}
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group cursor-pointer"
               whileHover={{ y: -2 }}
             >
               Inicio
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"></span>
-            </motion.a>
-            <motion.a
-              href="#funciones"
-              className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group"
+            </motion.button>
+            <motion.button
+              onClick={() => scrollToSection('funciones')}
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group cursor-pointer"
               whileHover={{ y: -2 }}
             >
               Funciones
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"></span>
-            </motion.a>
-            <motion.a
-              href="#testimonios"
-              className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group"
+            </motion.button>
+            <motion.button
+              onClick={() => scrollToSection('testimonios')}
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group cursor-pointer"
               whileHover={{ y: -2 }}
             >
               Testimonios
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"></span>
-            </motion.a>
-            <motion.a
-              href="#contacto"
-              className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group"
+            </motion.button>
+            <motion.button
+              onClick={() => scrollToSection('contacto')}
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 relative group cursor-pointer"
               whileHover={{ y: -2 }}
             >
               Contacto
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"></span>
-            </motion.a>
+            </motion.button>
           </nav>
 
           {/* Botones - Derecha */}
@@ -199,6 +218,17 @@ export function Header() {
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
             >
+              <a 
+                href="https://github.com/KevinBermudezC/kaizen" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-block"
+              >
+                <Button variant="outline" size="sm" className="mr-3 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 cursor-pointer">
+                  <Github className="mr-2 h-4 w-4" />
+                  GitHub
+                </Button>
+              </a>
               <Link href="/login">
                 <Button className="bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg cursor-pointer">
                   Acceso Gratuito

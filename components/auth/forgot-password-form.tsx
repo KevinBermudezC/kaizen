@@ -92,7 +92,7 @@ export function ForgotPasswordForm({ onSuccess, onBackToSignIn }: ForgotPassword
           <Button
             type="button"
             variant="outline"
-            className="w-full"
+            className="w-full cursor-pointer"
             onClick={onBackToSignIn}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -145,7 +145,7 @@ export function ForgotPasswordForm({ onSuccess, onBackToSignIn }: ForgotPassword
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full cursor-pointer"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -165,7 +165,7 @@ export function ForgotPasswordForm({ onSuccess, onBackToSignIn }: ForgotPassword
           <Button
             type="button"
             variant="ghost"
-            className="w-full text-sm"
+            className="w-full text-sm cursor-pointer"
             onClick={onBackToSignIn}
             disabled={isSubmitting}
           >
