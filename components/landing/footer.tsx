@@ -5,7 +5,7 @@ import { Github, Heart } from "lucide-react"
 
 export function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-muted via-muted/80 to-muted/60 py-12 px-4">
+    <footer className="bg-gradient-to-br from-slate-100 via-blue-100/30 to-green-100/30 dark:from-slate-900 dark:via-blue-900/20 dark:to-green-900/20 py-12 px-4">
       <div className="container mx-auto max-w-6xl">
         <motion.div
           className="grid grid-cols-1 md:grid-cols-4 gap-8"
@@ -20,8 +20,8 @@ export function Footer() {
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">改</span>
+              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
+                <span className="text-white font-bold text-lg">改</span>
               </div>
               <span className="font-bold text-xl text-foreground">Kaizen</span>
             </motion.div>
@@ -30,7 +30,7 @@ export function Footer() {
             </p>
             <motion.a
               href="#"
-              className="inline-flex items-center space-x-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+              className="inline-flex items-center space-x-2 text-sm text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-105"
               whileHover={{ x: 5 }}
             >
               <Github className="h-4 w-4" />
@@ -42,17 +42,17 @@ export function Footer() {
             <h3 className="font-semibold mb-4 text-foreground">Producto</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <motion.a href="#funciones" className="hover:text-primary transition-colors" whileHover={{ x: 5 }}>
+                <motion.a href="#funciones" className="hover:text-primary transition-all duration-200 hover:scale-105 inline-block" whileHover={{ x: 5 }}>
                   Funciones
                 </motion.a>
               </li>
               <li>
-                <motion.a href="#testimonios" className="hover:text-primary transition-colors" whileHover={{ x: 5 }}>
+                <motion.a href="#testimonios" className="hover:text-primary transition-all duration-200 hover:scale-105 inline-block" whileHover={{ x: 5 }}>
                   Testimonios
                 </motion.a>
               </li>
               <li>
-                <motion.a href="#" className="hover:text-primary transition-colors" whileHover={{ x: 5 }}>
+                <motion.a href="#" className="hover:text-primary transition-all duration-200 hover:scale-105 inline-block" whileHover={{ x: 5 }}>
                   Roadmap
                 </motion.a>
               </li>
@@ -63,17 +63,17 @@ export function Footer() {
             <h3 className="font-semibold mb-4 text-foreground">Comunidad</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <motion.a href="#" className="hover:text-primary transition-colors" whileHover={{ x: 5 }}>
+                <motion.a href="#" className="hover:text-primary transition-all duration-200 hover:scale-105 inline-block" whileHover={{ x: 5 }}>
                   Contribuir
                 </motion.a>
               </li>
               <li>
-                <motion.a href="#" className="hover:text-primary transition-colors" whileHover={{ x: 5 }}>
+                <motion.a href="#" className="hover:text-primary transition-all duration-200 hover:scale-105 inline-block" whileHover={{ x: 5 }}>
                   Reportar Bug
                 </motion.a>
               </li>
               <li>
-                <motion.a href="#" className="hover:text-primary transition-colors" whileHover={{ x: 5 }}>
+                <motion.a href="#" className="hover:text-primary transition-all duration-200 hover:scale-105 inline-block" whileHover={{ x: 5 }}>
                   Discusiones
                 </motion.a>
               </li>
@@ -84,17 +84,17 @@ export function Footer() {
             <h3 className="font-semibold mb-4 text-foreground">Recursos</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <motion.a href="#" className="hover:text-primary transition-colors" whileHover={{ x: 5 }}>
+                <motion.a href="#" className="hover:text-primary transition-all duration-200 hover:scale-105 inline-block" whileHover={{ x: 5 }}>
                   Documentación
                 </motion.a>
               </li>
               <li>
-                <motion.a href="#" className="hover:text-primary transition-colors" whileHover={{ x: 5 }}>
+                <motion.a href="#" className="hover:text-primary transition-all duration-200 hover:scale-105 inline-block" whileHover={{ x: 5 }}>
                   Filosofía Kaizen
                 </motion.a>
               </li>
               <li>
-                <motion.a href="#" className="hover:text-primary transition-colors" whileHover={{ x: 5 }}>
+                <motion.a href="#" className="hover:text-primary transition-all duration-200 hover:scale-105 inline-block" whileHover={{ x: 5 }}>
                   Blog
                 </motion.a>
               </li>
@@ -103,7 +103,7 @@ export function Footer() {
         </motion.div>
 
         <motion.div
-          className="border-t mt-8 pt-8 text-center text-sm text-muted-foreground"
+          className="border-t border-slate-200 dark:border-slate-700 mt-8 pt-8 text-center text-sm text-muted-foreground"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -113,7 +113,7 @@ export function Footer() {
             <p>&copy; {new Date().getFullYear()} Kaizen. Proyecto de código abierto.</p>
             <div className="flex items-center space-x-1">
               <span>Hecho con</span>
-              <Heart className="h-3 w-3 fill-accent text-accent" />
+              <Heart className="h-3 w-3 fill-orange-500 text-orange-500" />
               <span>para la comunidad</span>
             </div>
           </div>
