@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signInSchema, type SignInFormData } from '@/lib/validations/auth'
-import { useAuth } from '@/hooks/use-auth'
+import { useLogin } from '@/hooks/use-login'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -25,7 +25,7 @@ interface SignInFormProps {
 }
 
 export function SignInForm({ onSuccess, onSwitchToSignUp, onSwitchToForgotPassword }: SignInFormProps) {
-  const { signIn } = useAuth()
+  const { login } = useLogin()
   const [showPassword, setShowPassword] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -41,23 +41,22 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onSwitchToForgotPasswo
     setIsSubmitting(true)
     
     try {
-      const { data: result, error } = await signIn({
+      const result = await login({
         email: data.email,
         password: data.password,
       })
       
-      if (error) {
+      if (!result.success) {
         form.setError('root', {
           type: 'manual',
-          message: error.message || 'Error al iniciar sesión',
+          message: result.error || 'Error al iniciar sesión',
         })
         return
       }
       
-      if (result) {
+      if (result.success) {
         onSuccess?.()
-        // Redirigir al dashboard después del login exitoso
-        window.location.href = '/dashboard'
+        // La redirección se maneja en el hook useLogin
       }
     } catch (error) {
       form.setError('root', {
