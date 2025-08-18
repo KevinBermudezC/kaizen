@@ -6,7 +6,7 @@ Kaizen es una aplicación web para gestionar hábitos diarios y de largo plazo. 
 - Gestión de hábitos diarios y de largo plazo
 - Métricas de progreso
 - Recordatorios
-- Autenticación (BetterAuth)
+- Autenticación (Auth.js)
 - Interfaz moderna con componentes UI personalizados
 
 ## Estructura del proyecto
@@ -33,7 +33,7 @@ Kaizen es una aplicación web para gestionar hábitos diarios y de largo plazo. 
 - TypeScript
 - Drizzle
 - PostgreSQL
-- BetterAuth
+- Auth.js
 - Shadcn UI
 
 ## Próximos pasos
