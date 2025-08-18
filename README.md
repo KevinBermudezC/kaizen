@@ -23,7 +23,13 @@ Kaizen es una aplicación web para gestionar hábitos diarios y de largo plazo. 
 	npm install
 	```
 3. Configura las variables de entorno en `.env.local`
-4. Inicia la aplicación:
+4. Configura la base de datos:
+	```bash
+	npm run db:generate
+	npm run db:push
+	npm run db:seed
+	```
+5. Inicia la aplicación:
 	```bash
 	npm run dev
 	```
@@ -31,7 +37,7 @@ Kaizen es una aplicación web para gestionar hábitos diarios y de largo plazo. 
 ## Tecnologías utilizadas
 - Next.js
 - TypeScript
-- Drizzle
+- Prisma
 - PostgreSQL
 - Auth.js
 - Shadcn UI
