@@ -1,147 +1,226 @@
-'use client'
+"use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { ArrowLeft, Target, TrendingUp, Calendar, BarChart3 } from 'lucide-react'
-import Link from 'next/link'
+import { motion } from "framer-motion"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Progress } from "@/components/ui/progress"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { Target, TrendingUp, Calendar, CheckCircle2, Circle, Flame, Award, Plus } from "lucide-react"
 
-export default function DashboardPage() {
+// Mock data - en una app real vendría de una API/base de datos
+const mockStats = {
+  todayCompleted: 4,
+  todayTotal: 6,
+  currentStreak: 12,
+  totalHabits: 8,
+  weeklyProgress: 78,
+}
+
+const mockTodayHabits = [
+  { id: 1, name: "Meditar 10 minutos", completed: true, time: "07:00" },
+  { id: 2, name: "Leer 30 páginas", completed: true, time: "08:30" },
+  { id: 3, name: "Ejercicio 45 min", completed: true, time: "18:00" },
+  { id: 4, name: "Escribir en diario", completed: true, time: "21:00" },
+  { id: 5, name: "Beber 8 vasos de agua", completed: false, time: "Todo el día" },
+  { id: 6, name: "Dormir antes de 23:00", completed: false, time: "23:00" },
+]
+
+const motivationalQuote = {
+  text: "El éxito es la suma de pequeños esfuerzos repetidos día tras día.",
+  author: "Robert Collier",
+}
+
+export default function DashboardOverview() {
+  const completionPercentage = Math.round((mockStats.todayCompleted / mockStats.todayTotal) * 100)
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-green-50/30 dark:from-slate-900 dark:via-blue-900/20 dark:to-green-900/20">
-      {/* Header */}
-      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">改</span>
-              </div>
-              <span className="font-bold text-xl text-foreground">Kaizen Dashboard</span>
+    <div className="container mx-auto p-6 space-y-6">
+      {/* Welcome Section */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+        <h1 className="text-3xl font-heading font-bold">¡Buen día!</h1>
+        <p className="text-muted-foreground mt-1">Continúa tu camino de mejora continua con Kaizen</p>
+      </motion.div>
+
+      {/* Stats Cards */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+        className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+      >
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Hoy</CardTitle>
+            <Target className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {mockStats.todayCompleted}/{mockStats.todayTotal}
             </div>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="cursor-pointer">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Volver al Inicio
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </div>
+            <p className="text-xs text-muted-foreground">{completionPercentage}% completado</p>
+          </CardContent>
+        </Card>
 
-      {/* Contenido principal */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          {/* Título de bienvenida */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-foreground mb-4">
-              ¡Bienvenido a tu Dashboard!
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Aquí podrás gestionar tus hábitos, ver tu progreso y mantener tu mejora continua
-            </p>
-          </div>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Racha Actual</CardTitle>
+            <Flame className="h-4 w-4 text-orange-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{mockStats.currentStreak}</div>
+            <p className="text-xs text-muted-foreground">días consecutivos</p>
+          </CardContent>
+        </Card>
 
-          {/* Estadísticas rápidas */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Target className="h-5 w-5 text-blue-600" />
-                  Hábitos Activos
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-blue-600">0</div>
-                <p className="text-sm text-muted-foreground">Hábitos en seguimiento</p>
-              </CardContent>
-            </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Esta Semana</CardTitle>
+            <TrendingUp className="h-4 w-4 text-green-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{mockStats.weeklyProgress}%</div>
+            <p className="text-xs text-muted-foreground">progreso semanal</p>
+          </CardContent>
+        </Card>
 
-            <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-green-600" />
-                  Racha Actual
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-green-600">0</div>
-                <p className="text-sm text-muted-foreground">Días consecutivos</p>
-              </CardContent>
-            </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Hábitos</CardTitle>
+            <Award className="h-4 w-4 text-blue-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{mockStats.totalHabits}</div>
+            <p className="text-xs text-muted-foreground">hábitos activos</p>
+          </CardContent>
+        </Card>
+      </motion.div>
 
-            <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-purple-600" />
-                  Completados Hoy
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-purple-600">0</div>
-                <p className="text-sm text-muted-foreground">De 0 hábitos</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Acciones rápidas */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-blue-600" />
-                  Crear Nuevo Hábito
-                </CardTitle>
-                <CardDescription>
-                  Define un nuevo hábito que quieras desarrollar
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button className="w-full cursor-pointer">
-                  Crear Hábito
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-green-600" />
-                  Ver Progreso
-                </CardTitle>
-                <CardDescription>
-                  Analiza tu rendimiento y estadísticas
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button variant="outline" className="w-full cursor-pointer">
-                  Ver Estadísticas
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Mensaje de bienvenida */}
-          <div className="mt-12 text-center">
-            <Card className="bg-gradient-to-r from-blue-50/50 to-green-50/50 dark:from-blue-950/20 dark:to-green-950/20 border-blue-200 dark:border-blue-800">
-              <CardContent className="pt-6">
-                <div className="text-center space-y-4">
-                  <div className="mx-auto w-16 h-16 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center">
-                    <Target className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-blue-800 dark:text-blue-200 mb-2">
-                      ¡Comienza tu viaje Kaizen!
-                    </h3>
-                    <p className="text-blue-600 dark:text-blue-400 text-sm">
-                      Crea tu primer hábito y comienza a construir la mejor versión de ti mismo.
-                      Recuerda: la mejora continua se logra paso a paso, día a día.
-                    </p>
-                  </div>
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Today's Habits */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+          className="lg:col-span-2"
+        >
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Hábitos de Hoy</CardTitle>
+                  <CardDescription>
+                    {mockStats.todayCompleted} de {mockStats.todayTotal} completados
+                  </CardDescription>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+                <Button size="sm">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Agregar
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {mockTodayHabits.map((habit, index) => (
+                  <motion.div
+                    key={habit.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.2, delay: index * 0.05 }}
+                                         className="flex items-center space-x-3 p-3 rounded-lg border bg-card hover:bg-muted/30 hover:border-border/60 transition-all duration-200 ease-in-out"
+                  >
+                    <Button variant="ghost" size="sm" className="p-0 h-6 w-6">
+                      {habit.completed ? (
+                        <CheckCircle2 className="h-5 w-5 text-green-500" />
+                      ) : (
+                        <Circle className="h-5 w-5 text-muted-foreground" />
+                      )}
+                    </Button>
+                    <div className="flex-1">
+                      <p
+                        className={`text-sm font-medium ${habit.completed ? "line-through text-muted-foreground" : ""}`}
+                      >
+                        {habit.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground">{habit.time}</p>
+                    </div>
+                    {habit.completed && (
+                      <Badge variant="secondary" className="text-xs">
+                        Completado
+                      </Badge>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Progress & Motivation */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: 0.3 }}
+          className="space-y-6"
+        >
+          {/* Daily Progress */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Progreso Diario</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary mb-2">{completionPercentage}%</div>
+                <Progress value={completionPercentage} className="h-2" />
+              </div>
+              <Separator />
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Completados</span>
+                  <span className="font-medium">{mockStats.todayCompleted}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Pendientes</span>
+                  <span className="font-medium">{mockStats.todayTotal - mockStats.todayCompleted}</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Motivational Quote */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Inspiración</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <blockquote className="text-sm italic text-muted-foreground leading-relaxed">
+                &quot;{motivationalQuote.text}&quot;
+              </blockquote>
+              <cite className="text-xs text-muted-foreground mt-3 block">— {motivationalQuote.author}</cite>
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Acciones Rápidas</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <Button variant="outline" className="w-full justify-start bg-transparent" size="sm">
+                <Calendar className="h-4 w-4 mr-2" />
+                Ver Calendario
+              </Button>
+              <Button variant="outline" className="w-full justify-start bg-transparent" size="sm">
+                <TrendingUp className="h-4 w-4 mr-2" />
+                Ver Progreso
+              </Button>
+              <Button variant="outline" className="w-full justify-start bg-transparent" size="sm">
+                <Target className="h-4 w-4 mr-2" />
+                Gestionar Hábitos
+              </Button>
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
     </div>
   )
