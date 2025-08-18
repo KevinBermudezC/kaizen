@@ -113,10 +113,10 @@ export default function DashboardOverview() {
                     {mockStats.todayCompleted} de {mockStats.todayTotal} completados
                   </CardDescription>
                 </div>
-                <Button size="sm">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Agregar
-                </Button>
+                                 <Button size="sm" className="hover:scale-105 transition-all duration-200 ease-in-out">
+                   <Plus className="h-4 w-4 mr-2" />
+                   Agregar
+                 </Button>
               </div>
             </CardHeader>
             <CardContent>
@@ -129,13 +129,13 @@ export default function DashboardOverview() {
                     transition={{ duration: 0.2, delay: index * 0.05 }}
                                          className="flex items-center space-x-3 p-3 rounded-lg border bg-card hover:bg-muted/30 hover:border-border/60 transition-all duration-200 ease-in-out"
                   >
-                    <Button variant="ghost" size="sm" className="p-0 h-6 w-6">
-                      {habit.completed ? (
-                        <CheckCircle2 className="h-5 w-5 text-green-500" />
-                      ) : (
-                        <Circle className="h-5 w-5 text-muted-foreground" />
-                      )}
-                    </Button>
+                                         <Button variant="ghost" size="sm" className="p-0 h-6 w-6 hover:bg-muted/50 hover:text-foreground rounded-full transition-all duration-200 ease-in-out">
+                       {habit.completed ? (
+                         <CheckCircle2 className="h-5 w-5 text-green-500" />
+                       ) : (
+                         <Circle className="h-5 w-5 text-muted-foreground" />
+                       )}
+                     </Button>
                     <div className="flex-1">
                       <p
                         className={`text-sm font-medium ${habit.completed ? "line-through text-muted-foreground" : ""}`}
@@ -206,18 +206,18 @@ export default function DashboardOverview() {
               <CardTitle className="text-lg">Acciones Rápidas</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <Button variant="outline" className="w-full justify-start bg-transparent" size="sm">
-                <Calendar className="h-4 w-4 mr-2" />
-                Ver Calendario
-              </Button>
-              <Button variant="outline" className="w-full justify-start bg-transparent" size="sm">
-                <TrendingUp className="h-4 w-4 mr-2" />
-                Ver Progreso
-              </Button>
-              <Button variant="outline" className="w-full justify-start bg-transparent" size="sm">
-                <Target className="h-4 w-4 mr-2" />
-                Gestionar Hábitos
-              </Button>
+                <Button variant="outline" className="w-full justify-start bg-transparent hover:bg-muted/50 hover:text-foreground hover:border-border/60 transition-all duration-200 ease-in-out" size="sm">
+                  <Calendar className="h-4 w-4 mr-2" />
+                  Ver Calendario
+                </Button>
+                <Button variant="outline" className="w-full justify-start bg-transparent hover:bg-muted/50 hover:text-foreground hover:border-border/60 transition-all duration-200 ease-in-out" size="sm">
+                  <TrendingUp className="h-4 w-4 mr-2" />
+                  Ver Progreso
+                </Button>
+                <Button variant="outline" className="w-full justify-start bg-transparent hover:bg-muted/50 hover:text-foreground hover:border-border/60 transition-all duration-200 ease-in-out" size="sm">
+                  <Target className="h-4 w-4 mr-2" />
+                  Gestionar Hábitos
+                </Button>
             </CardContent>
           </Card>
         </motion.div>

@@ -52,7 +52,10 @@ export function NavMain({
               <Link href={item.url} className="w-full">
                 <SidebarMenuButton 
                   tooltip={item.title} 
-                  className={pathname === item.url ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground" : ""}
+                  className={pathname === item.url 
+                    ? "bg-primary text-primary-foreground hover:bg-primary/80 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground [&:hover]:bg-primary/80 [&:hover]:text-primary-foreground" 
+                    : "hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground [&:hover]:bg-sidebar-accent/50 [&:hover]:text-sidebar-accent-foreground"
+                  }
                 >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>

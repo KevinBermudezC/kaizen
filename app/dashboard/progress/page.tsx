@@ -1,241 +1,304 @@
+"use client"
+
+import { motion } from "framer-motion"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { IconTarget, IconTrendingUp, IconCalendar, IconAward } from "@tabler/icons-react"
+import { Progress } from "@/components/ui/progress"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { TrendingUp, Target, Award, Flame } from "lucide-react"
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts"
 
-export default function ProgressPage() {
-  // Datos de ejemplo para el progreso
-  const weeklyProgress = [
-    { day: "Lun", completed: 4, total: 4, percentage: 100 },
-    { day: "Mar", completed: 3, total: 4, percentage: 75 },
-    { day: "Mié", completed: 4, total: 4, percentage: 100 },
-    { day: "Jue", completed: 2, total: 4, percentage: 50 },
-    { day: "Vie", completed: 4, total: 4, percentage: 100 },
-    { day: "Sáb", completed: 3, total: 4, percentage: 75 },
-    { day: "Dom", completed: 4, total: 4, percentage: 100 }
-  ]
+// Mock data para gráficos
+const weeklyData = [
+  { day: "Lun", completed: 5, total: 6 },
+  { day: "Mar", completed: 6, total: 6 },
+  { day: "Mié", completed: 4, total: 6 },
+  { day: "Jue", completed: 6, total: 6 },
+  { day: "Vie", completed: 5, total: 6 },
+  { day: "Sáb", completed: 3, total: 6 },
+  { day: "Dom", completed: 4, total: 6 },
+]
 
-  const habitStats = [
-    {
-      name: "Ejercicio diario",
-      currentStreak: 7,
-      bestStreak: 45,
-      completionRate: 85,
-      trend: "up"
-    },
-    {
-      name: "Leer",
-      currentStreak: 15,
-      bestStreak: 30,
-      completionRate: 92,
-      trend: "up"
-    },
-    {
-      name: "Meditar",
-      currentStreak: 3,
-      bestStreak: 21,
-      completionRate: 65,
-      trend: "down"
-    },
-    {
-      name: "Beber agua",
-      currentStreak: 21,
-      bestStreak: 60,
-      completionRate: 98,
-      trend: "up"
-    }
-  ]
+const monthlyData = [
+  { month: "Ene", percentage: 78 },
+  { month: "Feb", percentage: 82 },
+  { month: "Mar", percentage: 75 },
+  { month: "Abr", percentage: 88 },
+  { month: "May", percentage: 92 },
+  { month: "Jun", percentage: 85 },
+]
 
-  const achievements = [
-    { name: "Primera Semana", description: "Completaste 7 días consecutivos", icon: "🎯", unlocked: true },
-    { name: "Constancia", description: "30 días consecutivos", icon: "🔥", unlocked: true },
-    { name: "Maestro", description: "100 días consecutivos", icon: "👑", unlocked: false },
-    { name: "Perfecto", description: "Una semana al 100%", icon: "⭐", unlocked: true }
-  ]
+const categoryData = [
+  { name: "Salud", value: 35, color: "#10b981" },
+  { name: "Bienestar", value: 25, color: "#3b82f6" },
+  { name: "Educación", value: 20, color: "#8b5cf6" },
+  { name: "Productividad", value: 20, color: "#f59e0b" },
+]
+
+const streakData = [
+  { habit: "Meditar", streak: 12, color: "blue" },
+  { habit: "Leer", streak: 8, color: "green" },
+  { habit: "Ejercicio", streak: 15, color: "orange" },
+  { habit: "Diario", streak: 5, color: "purple" },
+]
+
+export default function ProgressOverview() {
+  const totalCompletion = Math.round(
+    (weeklyData.reduce((acc, day) => acc + day.completed, 0) / weeklyData.reduce((acc, day) => acc + day.total, 0)) *
+      100,
+  )
 
   return (
     <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Progreso</h1>
-        <p className="text-muted-foreground">
-          Visualiza tu progreso y celebra tus logros
-        </p>
-      </div>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+        <h1 className="text-3xl font-heading font-bold">Progreso</h1>
+        <p className="text-muted-foreground mt-1">Analiza tu evolución y mantén la motivación</p>
+      </motion.div>
 
-      {/* Estadísticas generales */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      {/* Overview Stats */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+        className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+      >
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Promedio Semanal</CardTitle>
-            <IconTrendingUp className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Esta Semana</CardTitle>
+            <TrendingUp className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">86%</div>
-            <p className="text-xs text-muted-foreground">
-              +2% vs semana anterior
-            </p>
+            <div className="text-2xl font-bold">{totalCompletion}%</div>
+            <p className="text-xs text-muted-foreground">+5% vs semana anterior</p>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Racha Actual</CardTitle>
-            <IconTarget className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Racha Más Larga</CardTitle>
+            <Flame className="h-4 w-4 text-orange-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">21</div>
-            <p className="text-xs text-muted-foreground">
-              Días consecutivos
-            </p>
+            <div className="text-2xl font-bold">15</div>
+            <p className="text-xs text-muted-foreground">días consecutivos</p>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Hábitos Activos</CardTitle>
-            <IconTarget className="h-4 w-4 text-muted-foreground" />
+            <Target className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">4</div>
-            <p className="text-xs text-muted-foreground">
-              En progreso
-            </p>
+            <div className="text-2xl font-bold">6</div>
+            <p className="text-xs text-muted-foreground">en seguimiento</p>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Logros</CardTitle>
-            <IconAward className="h-4 w-4 text-muted-foreground" />
+            <Award className="h-4 w-4 text-purple-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3/4</div>
-            <p className="text-xs text-muted-foreground">
-              Desbloqueados
-            </p>
+            <div className="text-2xl font-bold">12</div>
+            <p className="text-xs text-muted-foreground">metas alcanzadas</p>
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
 
-      {/* Progreso semanal */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Progreso Semanal</CardTitle>
-          <CardDescription>
-            Tu rendimiento durante los últimos 7 días
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-7 gap-2">
-            {weeklyProgress.map((day, index) => (
-              <div key={index} className="text-center space-y-2">
-                <div className="text-sm font-medium text-muted-foreground">
-                  {day.day}
-                </div>
-                <div className="relative h-24 bg-muted rounded-lg overflow-hidden">
-                  <div 
-                    className="absolute bottom-0 left-0 right-0 bg-primary transition-all duration-300"
-                    style={{ height: `${day.percentage}%` }}
-                  />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-xs font-medium">
-                    <span className="text-foreground">{day.completed}/{day.total}</span>
-                    <span className="text-muted-foreground">{day.percentage}%</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <Tabs defaultValue="weekly" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="weekly">Semanal</TabsTrigger>
+          <TabsTrigger value="monthly">Mensual</TabsTrigger>
+          <TabsTrigger value="categories">Categorías</TabsTrigger>
+          <TabsTrigger value="streaks">Rachas</TabsTrigger>
+        </TabsList>
 
-      {/* Estadísticas por hábito */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Estadísticas por Hábito</CardTitle>
-          <CardDescription>
-            Rendimiento detallado de cada hábito
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {habitStats.map((habit, index) => (
-              <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="flex items-center space-x-4">
-                  <div className="p-2 bg-primary/10 rounded-full">
-                    <IconTarget className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">{habit.name}</h3>
-                    <div className="flex items-center space-x-4 mt-1">
-                      <span className="text-sm text-muted-foreground">
-                        Racha actual: <span className="font-medium">{habit.currentStreak}</span>
-                      </span>
-                      <span className="text-sm text-muted-foreground">
-                        Mejor: <span className="font-medium">{habit.bestStreak}</span>
-                      </span>
+        <TabsContent value="weekly" className="space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle>Progreso Semanal</CardTitle>
+                <CardDescription>Hábitos completados por día esta semana</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChartContainer
+                  config={{
+                    completed: {
+                      label: "Completados",
+                      color: "hsl(var(--primary))",
+                    },
+                    total: {
+                      label: "Total",
+                      color: "hsl(var(--muted))",
+                    },
+                  }}
+                  className="h-[300px]"
+                >
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={weeklyData}>
+                      <XAxis dataKey="day" />
+                      <YAxis />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Bar dataKey="completed" fill="var(--color-completed)" radius={4} />
+                      <Bar dataKey="total" fill="var(--color-total)" radius={4} opacity={0.3} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </TabsContent>
+
+        <TabsContent value="monthly" className="space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle>Tendencia Mensual</CardTitle>
+                <CardDescription>Porcentaje de completación por mes</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChartContainer
+                  config={{
+                    percentage: {
+                      label: "Porcentaje",
+                      color: "hsl(var(--primary))",
+                    },
+                  }}
+                  className="h-[300px]"
+                >
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={monthlyData}>
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Line
+                        type="monotone"
+                        dataKey="percentage"
+                        stroke="var(--color-percentage)"
+                        strokeWidth={3}
+                        dot={{ fill: "var(--color-percentage)", strokeWidth: 2, r: 4 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </TabsContent>
+
+        <TabsContent value="categories" className="space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+            className="grid gap-4 md:grid-cols-2"
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle>Distribución por Categoría</CardTitle>
+                <CardDescription>Tiempo dedicado a cada área</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChartContainer
+                  config={{
+                    value: {
+                      label: "Porcentaje",
+                    },
+                  }}
+                  className="h-[250px]"
+                >
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={categoryData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={100}
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                        {categoryData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Desglose por Categoría</CardTitle>
+                <CardDescription>Porcentaje de tiempo por área</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {categoryData.map((category) => (
+                  <div key={category.name} className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: category.color }} />
+                        <span>{category.name}</span>
+                      </div>
+                      <span className="font-medium">{category.value}%</span>
                     </div>
+                    <Progress value={category.value} className="h-2" />
                   </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold">{habit.completionRate}%</div>
-                  <div className="flex items-center space-x-1">
-                    <IconTrendingUp className={`h-4 w-4 ${
-                      habit.trend === 'up' ? 'text-green-500' : 'text-red-500'
-                    }`} />
-                    <span className={`text-xs ${
-                      habit.trend === 'up' ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                      {habit.trend === 'up' ? 'Mejorando' : 'Bajando'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+                ))}
+              </CardContent>
+            </Card>
+          </motion.div>
+        </TabsContent>
 
-      {/* Logros */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Logros</CardTitle>
-          <CardDescription>
-            Celebra tus hitos y logros alcanzados
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {achievements.map((achievement, index) => (
-              <div
-                key={index}
-                className={`p-4 border rounded-lg ${
-                  achievement.unlocked 
-                    ? 'bg-primary/5 border-primary/20' 
-                    : 'bg-muted/50 border-muted'
-                }`}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="text-2xl">{achievement.icon}</div>
-                  <div className="flex-1">
-                    <h3 className={`font-semibold ${
-                      achievement.unlocked ? 'text-foreground' : 'text-muted-foreground'
-                    }`}>
-                      {achievement.name}
-                    </h3>
-                    <p className={`text-sm ${
-                      achievement.unlocked ? 'text-muted-foreground' : 'text-muted-foreground/60'
-                    }`}>
-                      {achievement.description}
-                    </p>
-                  </div>
-                  {achievement.unlocked && (
-                    <Badge className="bg-primary text-primary-foreground">
-                      Desbloqueado
-                    </Badge>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+        <TabsContent value="streaks" className="space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle>Rachas Actuales</CardTitle>
+                <CardDescription>Días consecutivos por hábito</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {streakData.map((item, index) => (
+                  <motion.div
+                    key={item.habit}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.2, delay: index * 0.1 }}
+                    className="flex items-center justify-between p-4 rounded-lg border bg-card"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-4 h-4 rounded-full bg-${item.color}-500`} />
+                      <span className="font-medium">{item.habit}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Flame className="h-4 w-4 text-orange-500" />
+                      <span className="text-lg font-bold">{item.streak}</span>
+                      <span className="text-sm text-muted-foreground">días</span>
+                    </div>
+                  </motion.div>
+                ))}
+              </CardContent>
+            </Card>
+          </motion.div>
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

@@ -1,279 +1,287 @@
 "use client"
 
+import { motion } from "framer-motion"
+import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react"
-import { useState } from "react"
+import { ChevronLeft, ChevronRight, Calendar, CheckCircle2, Circle, Target } from "lucide-react"
 
-export default function CalendarPage() {
-  // Estado para el mes actual
-  const [currentMonth, setCurrentMonth] = useState(new Date())
+// Mock data para el calendario
+const currentDate = new Date()
+const currentMonth = currentDate.getMonth()
+const currentYear = currentDate.getFullYear()
 
-  // Datos de ejemplo para los hábitos del mes
-  const habits = [
-    { id: 1, name: "Ejercicio diario", color: "bg-blue-500" },
-    { id: 2, name: "Leer", color: "bg-green-500" },
-    { id: 3, name: "Meditar", color: "bg-purple-500" },
-    { id: 4, name: "Beber agua", color: "bg-cyan-500" }
-  ]
+const mockHabits = [
+  { id: 1, name: "Meditar", color: "blue" },
+  { id: 2, name: "Leer", color: "green" },
+  { id: 3, name: "Ejercicio", color: "orange" },
+  { id: 4, name: "Diario", color: "purple" },
+]
 
-  // Datos de ejemplo para el progreso diario
-  const dailyProgress = {
-    "2024-01-01": [1, 2, 3, 4], // Todos los hábitos completados
-    "2024-01-02": [1, 2, 4],    // Hábitos 1, 2 y 4 completados
-    "2024-01-03": [1, 3],       // Solo hábitos 1 y 3
-    "2024-01-04": [2, 4],       // Solo hábitos 2 y 4
-    "2024-01-05": [1, 2, 3, 4], // Todos completados
-    "2024-01-06": [1, 2],       // Solo hábitos 1 y 2
-    "2024-01-07": [1, 2, 3, 4], // Todos completados
-  }
+// Generar datos mock para el mes
+const generateMonthData = (month: number, year: number) => {
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
+  const data: Record<string, { completed: number[]; total: number }> = {}
 
-  // Función para obtener el nombre del mes
-  const getMonthName = (date: Date) => {
-    return date.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
-  }
+  for (let day = 1; day <= daysInMonth; day++) {
+    const completedHabits = mockHabits
+      .filter(() => Math.random() > 0.3) // 70% probabilidad de completar
+      .map((habit) => habit.id)
 
-  // Función para obtener los días del mes
-  const getDaysInMonth = (date: Date) => {
-    const year = date.getFullYear()
-    const month = date.getMonth()
-    const firstDay = new Date(year, month, 1)
-    const lastDay = new Date(year, month + 1, 0)
-    const daysInMonth = lastDay.getDate()
-    const startingDayOfWeek = firstDay.getDay()
-    
-    const days = []
-    
-    // Agregar días del mes anterior para completar la primera semana
-    for (let i = 0; i < startingDayOfWeek; i++) {
-      days.push(null)
+    data[day.toString()] = {
+      completed: completedHabits,
+      total: mockHabits.length,
     }
-    
-    // Agregar todos los días del mes
-    for (let i = 1; i <= daysInMonth; i++) {
-      days.push(new Date(year, month, i))
+  }
+
+  return data
+}
+
+const monthNames = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+]
+
+const dayNames = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
+
+export default function CalendarView() {
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth)
+  const [selectedYear, setSelectedYear] = useState(currentYear)
+  const [selectedDate, setSelectedDate] = useState<number | null>(null)
+
+  const monthData = generateMonthData(selectedMonth, selectedYear)
+
+  const getDaysInMonth = (month: number, year: number) => {
+    return new Date(year, month + 1, 0).getDate()
+  }
+
+  const getFirstDayOfMonth = (month: number, year: number) => {
+    return new Date(year, month, 1).getDay()
+  }
+
+  const navigateMonth = (direction: "prev" | "next") => {
+    if (direction === "prev") {
+      if (selectedMonth === 0) {
+        setSelectedMonth(11)
+        setSelectedYear(selectedYear - 1)
+      } else {
+        setSelectedMonth(selectedMonth - 1)
+      }
+    } else {
+      if (selectedMonth === 11) {
+        setSelectedMonth(0)
+        setSelectedYear(selectedYear + 1)
+      } else {
+        setSelectedMonth(selectedMonth + 1)
+      }
     }
-    
-    return days
+    setSelectedDate(null)
   }
 
-  // Función para navegar al mes anterior
-  const goToPreviousMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))
+  const daysInMonth = getDaysInMonth(selectedMonth, selectedYear)
+  const firstDay = getFirstDayOfMonth(selectedMonth, selectedYear)
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1)
+  const emptyDays = Array.from({ length: firstDay }, (_, i) => i)
+
+  const getCompletionPercentage = (day: number) => {
+    const dayData = monthData[day.toString()]
+    if (!dayData) return 0
+    return Math.round((dayData.completed.length / dayData.total) * 100)
   }
 
-  // Función para navegar al mes siguiente
-  const goToNextMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))
+  const getCompletionColor = (percentage: number) => {
+    if (percentage >= 80) return "bg-green-500"
+    if (percentage >= 60) return "bg-yellow-500"
+    if (percentage >= 40) return "bg-orange-500"
+    if (percentage > 0) return "bg-red-500"
+    return "bg-muted"
   }
-
-  // Función para formatear la fecha como clave
-  const formatDateKey = (date: Date) => {
-    return date.toISOString().split('T')[0]
-  }
-
-  // Función para obtener el progreso de un día específico
-  const getDayProgress = (date: Date) => {
-    const dateKey = formatDateKey(date)
-    return dailyProgress[dateKey as keyof typeof dailyProgress] || []
-  }
-
-  // Función para obtener el porcentaje de completado de un día
-  const getDayCompletionPercentage = (date: Date) => {
-    const completed = getDayProgress(date).length
-    return Math.round((completed / habits.length) * 100)
-  }
-
-  const days = getDaysInMonth(currentMonth)
 
   return (
     <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Calendario</h1>
-        <p className="text-muted-foreground">
-          Visualiza tu progreso diario en el calendario
-        </p>
-      </div>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+        <h1 className="text-3xl font-heading font-bold">Calendario</h1>
+        <p className="text-muted-foreground mt-1">Visualiza tu progreso día a día</p>
+      </motion.div>
 
-      {/* Controles del calendario */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-xl capitalize">{getMonthName(currentMonth)}</CardTitle>
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Calendar */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className="lg:col-span-2"
+        >
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calendar className="h-5 w-5" />
+                    {monthNames[selectedMonth]} {selectedYear}
+                  </CardTitle>
+                  <CardDescription>Haz clic en un día para ver los detalles</CardDescription>
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={() => navigateMonth("prev")}>
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => navigateMonth("next")}>
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-7 gap-2 mb-4">
+                {dayNames.map((day) => (
+                  <div key={day} className="text-center text-sm font-medium text-muted-foreground p-2">
+                    {day}
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-7 gap-2">
+                {emptyDays.map((_, index) => (
+                  <div key={`empty-${index}`} className="aspect-square" />
+                ))}
+
+                {days.map((day) => {
+                  const percentage = getCompletionPercentage(day)
+                  const isToday =
+                    day === currentDate.getDate() &&
+                    selectedMonth === currentDate.getMonth() &&
+                    selectedYear === currentDate.getFullYear()
+                  const isSelected = selectedDate === day
+
+                  return (
+                    <motion.button
+                      key={day}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setSelectedDate(day)}
+                      className={`aspect-square p-2 rounded-lg border transition-colors relative ${
+                        isSelected
+                          ? "border-primary bg-primary/10"
+                          : isToday
+                            ? "border-primary bg-primary/5"
+                            : "border-border hover:bg-accent"
+                      }`}
+                    >
+                      <div className="text-sm font-medium">{day}</div>
+                      <div
+                        className={`absolute bottom-1 left-1/2 transform -translate-x-1/2 w-4 h-1 rounded-full ${getCompletionColor(percentage)}`}
+                      />
+                    </motion.button>
+                  )
+                })}
+              </div>
+
+              {/* Legend */}
+              <div className="flex items-center justify-center gap-4 mt-6 text-xs text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <div className="w-3 h-1 bg-muted rounded-full" />
+                  <span>Sin datos</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-3 h-1 bg-red-500 rounded-full" />
+                  <span>0-40%</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-3 h-1 bg-orange-500 rounded-full" />
+                  <span>40-60%</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-3 h-1 bg-yellow-500 rounded-full" />
+                  <span>60-80%</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-3 h-1 bg-green-500 rounded-full" />
+                  <span>80-100%</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Day Details */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {selectedDate ? `${selectedDate} de ${monthNames[selectedMonth]}` : "Selecciona un día"}
+              </CardTitle>
               <CardDescription>
-                Progreso de tus hábitos durante el mes
+                {selectedDate ? "Detalles de hábitos del día" : "Haz clic en un día del calendario"}
               </CardDescription>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" onClick={goToPreviousMonth}>
-                <IconChevronLeft className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="sm" onClick={goToNextMonth}>
-                <IconChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {/* Leyenda de hábitos */}
-          <div className="mb-6">
-            <h3 className="text-sm font-medium mb-3">Leyenda de Hábitos:</h3>
-            <div className="flex flex-wrap gap-3">
-              {habits.map((habit) => (
-                <div key={habit.id} className="flex items-center space-x-2">
-                  <div className={`w-3 h-3 rounded-full ${habit.color}`} />
-                  <span className="text-sm text-muted-foreground">{habit.name}</span>
+            </CardHeader>
+            <CardContent>
+              {selectedDate ? (
+                <div className="space-y-4">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-primary mb-2">{getCompletionPercentage(selectedDate)}%</div>
+                    <p className="text-sm text-muted-foreground">Completado</p>
+                  </div>
+
+                  <div className="space-y-3">
+                    {mockHabits.map((habit) => {
+                      const dayData = monthData[selectedDate.toString()]
+                      const isCompleted = dayData?.completed.includes(habit.id) || false
+
+                      return (
+                        <div key={habit.id} className="flex items-center justify-between p-3 rounded-lg border bg-card">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-3 h-3 rounded-full bg-${habit.color}-500`} />
+                            <span className="text-sm font-medium">{habit.name}</span>
+                          </div>
+                          {isCompleted ? (
+                            <CheckCircle2 className="h-4 w-4 text-green-500" />
+                          ) : (
+                            <Circle className="h-4 w-4 text-muted-foreground" />
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+
+                  <div className="pt-4 border-t">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Completados</span>
+                      <span className="font-medium">{monthData[selectedDate.toString()]?.completed.length || 0}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Total</span>
+                      <span className="font-medium">{mockHabits.length}</span>
+                    </div>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Calendario */}
-          <div className="grid grid-cols-7 gap-1">
-            {/* Días de la semana */}
-            {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map((day) => (
-              <div key={day} className="p-2 text-center text-sm font-medium text-muted-foreground">
-                {day}
-              </div>
-            ))}
-            
-            {/* Días del mes */}
-            {days.map((day, index) => (
-              <div
-                key={index}
-                className={`min-h-[80px] p-2 border rounded-lg ${
-                  day ? 'bg-background hover:bg-muted/50' : 'bg-muted/20'
-                }`}
-              >
-                {day && (
-                  <>
-                    <div className="text-sm font-medium mb-2">
-                      {day.getDate()}
-                    </div>
-                    
-                    {/* Indicadores de hábitos completados */}
-                    <div className="space-y-1">
-                      {habits.map((habit) => {
-                        const isCompleted = getDayProgress(day).includes(habit.id)
-                        return (
-                          <div
-                            key={habit.id}
-                            className={`w-2 h-2 rounded-full mx-auto ${
-                              isCompleted ? habit.color : 'bg-muted'
-                            }`}
-                            title={`${habit.name}: ${isCompleted ? 'Completado' : 'Pendiente'}`}
-                          />
-                        )
-                      })}
-                    </div>
-                    
-                    {/* Porcentaje de completado */}
-                    <div className="mt-2 text-center">
-                      <Badge variant="outline" className="text-xs">
-                        {getDayCompletionPercentage(day)}%
-                      </Badge>
-                    </div>
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Resumen del mes */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">Días Perfectos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">3</div>
-            <p className="text-xs text-muted-foreground">
-              Días con 100% de hábitos completados
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">Promedio Diario</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">75%</div>
-            <p className="text-xs text-muted-foreground">
-              Promedio de hábitos completados por día
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">Mejor Día</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">Lun, 1</div>
-            <p className="text-xs text-muted-foreground">
-              Día con mejor rendimiento
-            </p>
-          </CardContent>
-        </Card>
+              ) : (
+                <div className="text-center py-8">
+                  <Target className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-sm text-muted-foreground">
+                    Selecciona un día en el calendario para ver los detalles de tus hábitos
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
-
-      {/* Vista de semana actual */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Esta Semana</CardTitle>
-          <CardDescription>
-            Progreso detallado de la semana actual
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {Array.from({ length: 7 }, (_, i) => {
-              const date = new Date()
-              date.setDate(date.getDate() - date.getDay() + i)
-              const progress = getDayProgress(date)
-              const percentage = getDayCompletionPercentage(date)
-              
-              return (
-                <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 text-center text-sm font-medium">
-                      {date.toLocaleDateString('es-ES', { weekday: 'short' })}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2">
-                    <div className="flex space-x-1">
-                      {habits.map((habit) => {
-                        const isCompleted = progress.includes(habit.id)
-                        return (
-                          <div
-                            key={habit.id}
-                            className={`w-3 h-3 rounded-full ${
-                              isCompleted ? habit.color : 'bg-muted'
-                            }`}
-                          />
-                        )
-                      })}
-                    </div>
-                    <Badge variant="outline" className="ml-2">
-                      {percentage}%
-                    </Badge>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   )
 }

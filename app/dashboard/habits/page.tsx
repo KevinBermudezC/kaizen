@@ -1,178 +1,276 @@
+"use client"
+
+import { motion } from "framer-motion"
+import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { IconTarget, IconPlus, IconEdit, IconTrash } from "@tabler/icons-react"
+import { Input } from "@/components/ui/input"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Plus, Search, MoreHorizontal, Edit, Trash2, Target, Calendar, Clock, TrendingUp } from "lucide-react"
+import Link from "next/link"
 
-export default function HabitsPage() {
-  // Datos de ejemplo para los hábitos
-  const habits = [
-    {
-      id: 1,
-      name: "Ejercicio diario",
-      description: "30 minutos de ejercicio cardiovascular",
-      frequency: "Diario",
-      streak: 7,
-      status: "active",
-      category: "Salud"
-    },
-    {
-      id: 2,
-      name: "Leer",
-      description: "Leer 20 páginas por día",
-      frequency: "Diario",
-      streak: 15,
-      status: "active",
-      category: "Desarrollo personal"
-    },
-    {
-      id: 3,
-      name: "Meditar",
-      description: "10 minutos de meditación matutina",
-      frequency: "Diario",
-      streak: 3,
-      status: "active",
-      category: "Bienestar"
-    },
-    {
-      id: 4,
-      name: "Beber agua",
-      description: "8 vasos de agua al día",
-      frequency: "Diario",
-      streak: 21,
-      status: "active",
-      category: "Salud"
-    }
-  ]
+// Mock data - en una app real vendría de una API/base de datos
+const mockHabits = [
+  {
+    id: 1,
+    name: "Meditar 10 minutos",
+    description: "Práctica diaria de mindfulness para reducir estrés",
+    category: "Bienestar",
+    frequency: "Diario",
+    streak: 12,
+    completedToday: true,
+    color: "blue",
+    createdAt: "2024-01-15",
+  },
+  {
+    id: 2,
+    name: "Leer 30 páginas",
+    description: "Lectura de libros de desarrollo personal y técnicos",
+    category: "Educación",
+    frequency: "Diario",
+    streak: 8,
+    completedToday: true,
+    color: "green",
+    createdAt: "2024-01-20",
+  },
+  {
+    id: 3,
+    name: "Ejercicio 45 min",
+    description: "Rutina de ejercicio cardiovascular y fuerza",
+    category: "Salud",
+    frequency: "Lunes, Miércoles, Viernes",
+    streak: 15,
+    completedToday: false,
+    color: "orange",
+    createdAt: "2024-01-10",
+  },
+  {
+    id: 4,
+    name: "Escribir en diario",
+    description: "Reflexión diaria y planificación del día siguiente",
+    category: "Productividad",
+    frequency: "Diario",
+    streak: 5,
+    completedToday: true,
+    color: "purple",
+    createdAt: "2024-02-01",
+  },
+  {
+    id: 5,
+    name: "Beber 8 vasos de agua",
+    description: "Mantener hidratación adecuada durante el día",
+    category: "Salud",
+    frequency: "Diario",
+    streak: 3,
+    completedToday: false,
+    color: "cyan",
+    createdAt: "2024-02-05",
+  },
+]
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
-      case 'paused':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
-      case 'completed':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300'
-    }
+const categories = ["Todos", "Salud", "Bienestar", "Educación", "Productividad"]
+
+export default function HabitsOverview() {
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("Todos")
+
+  const filteredHabits = mockHabits.filter((habit) => {
+    const matchesSearch = habit.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCategory = selectedCategory === "Todos" || habit.category === selectedCategory
+    return matchesSearch && matchesCategory
+  })
+
+  const stats = {
+    total: mockHabits.length,
+    completedToday: mockHabits.filter((h) => h.completedToday).length,
+    activeStreak: Math.max(...mockHabits.map((h) => h.streak)),
   }
 
   return (
     <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Mis Hábitos</h1>
-          <p className="text-muted-foreground">
-            Gestiona y rastrea tus hábitos diarios para mejorar tu vida
-          </p>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-heading font-bold">Mis Hábitos</h1>
+            <p className="text-muted-foreground mt-1">Gestiona y da seguimiento a tus hábitos diarios</p>
+          </div>
+          <Button asChild>
+            <Link href="/dashboard/habits/new">
+              <Plus className="h-4 w-4 mr-2" />
+              Nuevo Hábito
+            </Link>
+          </Button>
         </div>
-        <Button className="bg-primary hover:bg-primary/90">
-          <IconPlus className="mr-2 h-4 w-4" />
-          Nuevo Hábito
-        </Button>
-      </div>
+      </motion.div>
 
-      {/* Estadísticas rápidas */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      {/* Stats */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+        className="grid gap-4 md:grid-cols-3"
+      >
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Hábitos</CardTitle>
-            <IconTarget className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Total Hábitos</CardTitle>
+            <Target className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{habits.length}</div>
-            <p className="text-xs text-muted-foreground">
-              Hábitos activos
-            </p>
+            <div className="text-2xl font-bold">{stats.total}</div>
+            <p className="text-xs text-muted-foreground">hábitos activos</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Racha Actual</CardTitle>
-            <IconTarget className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">21</div>
-            <p className="text-xs text-muted-foreground">
-              Días consecutivos
-            </p>
-          </CardContent>
-        </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Completados Hoy</CardTitle>
-            <IconTarget className="h-4 w-4 text-muted-foreground" />
+            <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3/4</div>
-            <p className="text-xs text-muted-foreground">
-              75% completado
-            </p>
+            <div className="text-2xl font-bold">{stats.completedToday}</div>
+            <p className="text-xs text-muted-foreground">de {stats.total} hábitos</p>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Mejor Racha</CardTitle>
-            <IconTarget className="h-4 w-4 text-muted-foreground" />
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">45</div>
-            <p className="text-xs text-muted-foreground">
-              Días consecutivos
-            </p>
+            <div className="text-2xl font-bold">{stats.activeStreak}</div>
+            <p className="text-xs text-muted-foreground">días consecutivos</p>
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
 
-      {/* Lista de hábitos */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Hábitos Activos</CardTitle>
-          <CardDescription>
-            Gestiona tus hábitos diarios y rastrea tu progreso
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {habits.map((habit) => (
-              <div
-                key={habit.id}
-                className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="p-2 bg-primary/10 rounded-full">
-                    <IconTarget className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">{habit.name}</h3>
-                    <p className="text-sm text-muted-foreground">{habit.description}</p>
-                    <div className="flex items-center space-x-2 mt-1">
+      {/* Filters */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.2 }}
+        className="flex flex-col sm:flex-row gap-4"
+      >
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Buscar hábitos..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+
+        <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full sm:w-auto">
+          <TabsList className="grid w-full grid-cols-5 sm:w-auto">
+            {categories.map((category) => (
+              <TabsTrigger key={category} value={category} className="text-xs">
+                {category}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </motion.div>
+
+      {/* Habits Grid */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.3 }}
+        className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+      >
+        {filteredHabits.map((habit, index) => (
+          <motion.div
+            key={habit.id}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.2, delay: index * 0.05 }}
+            whileHover={{ y: -2 }}
+          >
+            <Card className="h-full">
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className={`w-3 h-3 rounded-full bg-${habit.color}-500`} />
                       <Badge variant="secondary" className="text-xs">
-                        {habit.frequency}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">
                         {habit.category}
                       </Badge>
-                      <Badge className={`text-xs ${getStatusColor(habit.status)}`}>
-                        {habit.streak} días
-                      </Badge>
+                    </div>
+                    <CardTitle className="text-lg leading-tight">{habit.name}</CardTitle>
+                    <CardDescription className="text-sm mt-1">{habit.description}</CardDescription>
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem>
+                        <Edit className="h-4 w-4 mr-2" />
+                        Editar
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="text-destructive">
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Eliminar
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-1 text-muted-foreground">
+                      <Clock className="h-3 w-3" />
+                      {habit.frequency}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <TrendingUp className="h-3 w-3 text-orange-500" />
+                      <span className="font-medium">{habit.streak} días</span>
                     </div>
                   </div>
+
+                  <div className="flex items-center justify-between">
+                    <Badge variant={habit.completedToday ? "default" : "outline"} className="text-xs">
+                      {habit.completedToday ? "Completado hoy" : "Pendiente"}
+                    </Badge>
+                    <Button
+                      size="sm"
+                      variant={habit.completedToday ? "secondary" : "default"}
+                      className="h-7 px-3 text-xs"
+                    >
+                      {habit.completedToday ? "Desmarcar" : "Completar"}
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Button variant="outline" size="sm">
-                    <IconEdit className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" size="sm" className="text-destructive hover:text-destructive">
-                    <IconTrash className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {filteredHabits.length === 0 && (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
+          <Target className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <h3 className="text-lg font-medium mb-2">No se encontraron hábitos</h3>
+          <p className="text-muted-foreground mb-4">
+            {searchTerm || selectedCategory !== "Todos"
+              ? "Intenta ajustar tus filtros de búsqueda"
+              : "Comienza creando tu primer hábito"}
+          </p>
+          <Button asChild>
+            <Link href="/dashboard/habits/new">
+              <Plus className="h-4 w-4 mr-2" />
+              Crear Hábito
+            </Link>
+          </Button>
+        </motion.div>
+      )}
     </div>
   )
 }
