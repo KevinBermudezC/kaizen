@@ -1,7 +1,11 @@
 import NextAuth from "next-auth"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { prisma } from "@/lib/prisma"
 import CredentialsProvider from "next-auth/providers/credentials"
+import bcrypt from "bcryptjs"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -10,22 +14,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
+        if (!credentials?.email || !credentials?.password || typeof credentials.email !== 'string' || typeof credentials.password !== 'string') {
           return null
         }
 
         try {
-          // Por ahora, solo para pruebas - puedes implementar la lógica de BD después
-          if (credentials.email === "test@example.com" && credentials.password === "password") {
-            return {
-              id: "1",
-              email: "test@example.com",
-              name: "Test User",
-              image: null,
-            }
+          // Buscar usuario en la base de datos
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email }
+          })
+
+          if (!user || !user.password) {
+            return null
           }
 
-          return null
+          // Verificar contraseña
+          const isPasswordValid = await bcrypt.compare(credentials.password as string, user.password as string)
+          
+          if (!isPasswordValid) {
+            return null
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name || "",
+            image: user.image,
+          }
         } catch (error) {
           console.error("Error during authentication:", error)
           return null

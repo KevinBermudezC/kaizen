@@ -19,6 +19,9 @@ model User {
   password      String?
   accounts      Account[]
   sessions      Session[]
+  categories    Category[]
+  habits        Habit[]
+  routines      Routine[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -62,4 +65,80 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verificationToken")
+}
+
+/// Categorías de hábitos (ej. Salud, Estudio, Trabajo, Fitness, Mindfulness…)
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  color     String?  // opcional, para diferenciar visualmente
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  habits    Habit[]
+  
+  @@map("categories")
+}
+
+/// Hábitos creados por el usuario
+model Habit {
+  id          String      @id @default(cuid())
+  title       String
+  description String?
+  frequency   String      // daily, weekly, custom
+  targetDays  Int?        // Para hábitos semanales (ej: 3 días por semana)
+  startDate   DateTime    @default(now())
+  isArchived  Boolean     @default(false)
+  reminderTime DateTime?  // Hora del recordatorio
+  streak      Int         @default(0) // Racha actual
+  longestStreak Int       @default(0) // Mejor racha
+  notes       String?     // Notas del usuario
+
+  userId      String
+  categoryId  String?
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category    Category?   @relation(fields: [categoryId], references: [id])
+  completions Completion[]
+  routineHabits RoutineHabit[]
+  
+  @@map("habits")
+}
+
+/// Registro de cumplimiento de un hábito
+model Completion {
+  id        String   @id @default(cuid())
+  date      DateTime @default(now())
+  status    Boolean  @default(true) // true si se completó, false si se falló
+  notes     String?  // Notas del día
+  mood      Int?     // 1-5 escala de ánimo
+  difficulty Int?    // 1-5 escala de dificultad
+  habitId   String
+
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  
+  @@map("completions")
+}
+
+/// Rutinas → grupos de hábitos (ej: "Mañana productiva" con 3 hábitos dentro)
+model Routine {
+  id        String   @id @default(cuid())
+  name      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  habits    RoutineHabit[]
+  
+  @@map("routines")
+}
+
+/// Tabla intermedia rutina-hábito
+model RoutineHabit {
+  id        String @id @default(cuid())
+  routineId String
+  habitId   String
+
+  routine Routine @relation(fields: [routineId], references: [id], onDelete: Cascade)
+  habit   Habit   @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  @@unique([routineId, habitId])
+  @@map("routine_habits")
 }

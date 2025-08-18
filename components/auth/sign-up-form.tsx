@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signUpSchema, type SignUpFormData } from '@/lib/validations/auth'
-import { useAuth } from '@/hooks/use-auth'
+import { useRegister } from '@/hooks/use-register'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -24,10 +24,9 @@ interface SignUpFormProps {
 }
 
 export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
-  const { signUp } = useAuth()
+  const { register, isLoading } = useRegister()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const form = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
@@ -63,35 +62,29 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
   const passwordStrength = getPasswordStrength(password)
 
   const onSubmit = async (data: SignUpFormData) => {
-    setIsSubmitting(true)
-    
     try {
-      const { data: result, error } = await signUp({
+      const result = await register({
         email: data.email,
         password: data.password,
         name: data.name,
       })
       
-      if (error) {
+      if (!result.success) {
         form.setError('root', {
           type: 'manual',
-          message: error.message || 'Error al registrarse',
+          message: result.error || 'Error al registrarse',
         })
         return
       }
       
-      if (result) {
-        onSuccess?.()
-        // Redirigir al dashboard después del registro exitoso
-        window.location.href = '/dashboard'
-      }
+      onSuccess?.()
+      // Redirigir al login después del registro exitoso
+      window.location.href = '/login?message=Usuario registrado exitosamente'
     } catch (error) {
       form.setError('root', {
         type: 'manual',
         message: error instanceof Error ? error.message : 'Error inesperado',
       })
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
@@ -120,7 +113,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
                       type="text"
                       placeholder="Tu nombre completo"
                       autoComplete="name"
-                      disabled={isSubmitting}
+                      disabled={isLoading}
                     />
                   </FormControl>
                   <FormMessage />
@@ -140,7 +133,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
                       type="email"
                       placeholder="tu@email.com"
                       autoComplete="email"
-                      disabled={isSubmitting}
+                      disabled={isLoading}
                     />
                   </FormControl>
                   <FormMessage />
@@ -161,7 +154,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
                         type={showPassword ? 'text' : 'password'}
                         placeholder="••••••••"
                         autoComplete="new-password"
-                        disabled={isSubmitting}
+                        disabled={isLoading}
                         className="pr-10"
                       />
                       <Button
@@ -170,7 +163,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
                         size="sm"
                         className="absolute right-0 top-0 h-full px-3 py-2 cursor-pointer"
                         onClick={() => setShowPassword(!showPassword)}
-                        disabled={isSubmitting}
+                        disabled={isLoading}
                       >
                         {showPassword ? (
                           <EyeOff className="h-4 w-4 hover:bg-primary/10" />
@@ -260,7 +253,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
                         type={showConfirmPassword ? 'text' : 'password'}
                         placeholder="••••••••"
                         autoComplete="new-password"
-                        disabled={isSubmitting}
+                        disabled={isLoading}
                         className="pr-10"
                       />
                       <Button
@@ -269,7 +262,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
                         size="sm"
                         className="absolute right-0 top-0 h-full px-3 py-2 cursor-pointer"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        disabled={isSubmitting}
+                        disabled={isLoading}
                       >
                         {showConfirmPassword ? (
                           <EyeOff className="h-4 w-4 hover:bg-primary/10" />
@@ -297,9 +290,9 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
             <Button
               type="submit"
               className="w-full cursor-pointer"
-              disabled={isSubmitting}
+              disabled={isLoading}
             >
-              {isSubmitting ? (
+              {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Creando cuenta...
@@ -320,7 +313,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
               variant="link"
               className="p-0 h-auto font-normal text-primary hover:text-primary/80 cursor-pointer"
               onClick={onSwitchToSignIn}
-              disabled={isSubmitting}
+              disabled={isLoading}
             >
               Inicia sesión aquí
             </Button>
